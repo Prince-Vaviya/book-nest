@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'providers/admin_provider.dart';
 import 'providers/library_provider.dart';
 import 'providers/reader_provider.dart';
 import 'screens/splash/splash_screen.dart';
@@ -26,6 +27,7 @@ class BookNestApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LibraryProvider()),
         ChangeNotifierProvider(create: (_) => ReaderProvider()),
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
       ],
       child: MaterialApp(
         title: 'BookNest',

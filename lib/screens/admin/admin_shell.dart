@@ -1,0 +1,152 @@
+import 'package:flutter/material.dart';
+import '../../theme/app_theme.dart';
+import '../../theme/app_typography.dart';
+import 'dashboard/admin_dashboard_screen.dart';
+import 'books/admin_books_screen.dart';
+import 'reviews/admin_reviews_screen.dart';
+import 'users/admin_users_screen.dart';
+
+class AdminShell extends StatefulWidget {
+  const AdminShell({super.key});
+
+  @override
+  State<AdminShell> createState() => _AdminShellState();
+}
+
+class _AdminShellState extends State<AdminShell> {
+  int _currentTabIndex = 0;
+
+  void _onTabSelected(int index) {
+    setState(() {
+      _currentTabIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screens = [
+      AdminDashboardScreen(onNavigateTab: _onTabSelected),
+      const AdminBooksScreen(),
+      const AdminReviewsScreen(),
+      const AdminUsersScreen(),
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryIndigo,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.admin_panel_settings_rounded, size: 16, color: AppColors.primaryLightAmber),
+                  const SizedBox(width: 6),
+                  Text(
+                    'ADMIN PORTAL',
+                    style: AppTypography.labelSmall(color: Colors.white)
+                        .copyWith(letterSpacing: 1.2, fontWeight: FontWeight.w800),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          // Switch back to Reader Mode
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.auto_stories_rounded, size: 16, color: AppColors.primaryAmber),
+            label: Text(
+              'Reader Mode',
+              style: AppTypography.labelSmall(color: AppColors.primaryAmber)
+                  .copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, color: AppColors.borderLight),
+        ),
+      ),
+      body: IndexedStack(
+        index: _currentTabIndex,
+        children: screens,
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(top: BorderSide(color: AppColors.borderLight)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.secondaryIndigo.withValues(alpha: 0.05),
+              blurRadius: 16,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(0, Icons.dashboard_rounded, Icons.dashboard_outlined, 'Dashboard'),
+                _buildNavItem(1, Icons.library_books_rounded, Icons.library_books_outlined, 'Books'),
+                _buildNavItem(2, Icons.gavel_rounded, Icons.gavel_outlined, 'Reviews'),
+                _buildNavItem(3, Icons.people_alt_rounded, Icons.people_alt_outlined, 'Users'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(int index, IconData activeIcon, IconData inactiveIcon, String label) {
+    final isSelected = _currentTabIndex == index;
+
+    return InkWell(
+      onTap: () => _onTabSelected(index),
+      borderRadius: BorderRadius.circular(9999),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: isSelected
+            ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
+            : const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.secondaryIndigo : Colors.transparent,
+          borderRadius: BorderRadius.circular(9999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isSelected ? activeIcon : inactiveIcon,
+              color: isSelected ? Colors.white : AppColors.textMuted,
+              size: 20,
+            ),
+            if (isSelected) ...[
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: AppTypography.labelSmall(color: Colors.white)
+                    .copyWith(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

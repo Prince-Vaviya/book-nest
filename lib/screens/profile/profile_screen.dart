@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../admin/admin_shell.dart';
 import 'package:provider/provider.dart';
 import '../../providers/library_provider.dart';
 import '../../theme/app_theme.dart';
@@ -162,6 +163,32 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  _buildSettingsTile(
+                    icon: Icons.admin_panel_settings_rounded,
+                    title: 'Admin Operations Portal',
+                    subtitle: 'Catalog inventory, moderation & users',
+                    trailing: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondaryIndigo,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'ADMIN',
+                        style: AppTypography.labelSmall(color: AppColors.primaryLightAmber)
+                            .copyWith(fontWeight: FontWeight.w700, fontSize: 10),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AdminShell(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1, color: AppColors.borderLight),
                   _buildSettingsTile(
                     icon: Icons.notifications_none_rounded,
                     title: 'Daily Reading Reminders',
