@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${_getGreeting()}, Rajneesh 👋',
+                      '${_getGreeting()}, ${library.userName} 👋',
                       style: AppTypography.displayMedium(color: AppColors.secondaryIndigo)
                           .copyWith(fontSize: 24),
                     ),

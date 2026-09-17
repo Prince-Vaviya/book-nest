@@ -5,14 +5,59 @@ import '../data/mock_books_data.dart';
 
 class LibraryProvider extends ChangeNotifier {
   final List<Book> _books = List.from(mockBooksCatalog);
-  final ReadingGoal _goal = ReadingGoal();
+  ReadingGoal _goal = ReadingGoal();
   String _selectedGenreFilter = 'All';
   String _searchQuery = '';
+  
+  // User Onboarding Profile
+  String _userName = 'Rajneesh';
+  String _userTitle = 'Curator & Software Architect';
+  List<String> _favoriteGenres = ['Technology', 'Philosophy'];
+  bool _isOnboardingCompleted = false;
 
   List<Book> get allBooks => _books;
   ReadingGoal get goal => _goal;
   String get selectedGenreFilter => _selectedGenreFilter;
   String get searchQuery => _searchQuery;
+  String get userName => _userName;
+  String get userTitle => _userTitle;
+  List<String> get favoriteGenres => _favoriteGenres;
+  bool get isOnboardingCompleted => _isOnboardingCompleted;
+
+  void completeOnboarding({
+    required String name,
+    required String title,
+    required int dailyTargetMinutes,
+    required List<String> genres,
+  }) {
+    _userName = name.trim().isNotEmpty ? name.trim() : 'Reader';
+    _userTitle = title.trim().isNotEmpty ? title.trim() : 'Avid Reader';
+    _favoriteGenres = genres.isNotEmpty ? genres : ['Technology', 'Philosophy'];
+    _goal = ReadingGoal(
+      dailyTargetMinutes: dailyTargetMinutes,
+      minutesReadToday: _goal.minutesReadToday,
+      currentStreakDays: _goal.currentStreakDays,
+      yearlyBookTarget: _goal.yearlyBookTarget,
+      booksCompletedThisYear: _goal.booksCompletedThisYear,
+      weeklyMinutesHistory: _goal.weeklyMinutesHistory,
+    );
+    _isOnboardingCompleted = true;
+    notifyListeners();
+  }
+
+  void updateProfile({
+    String? name,
+    String? title,
+  }) {
+    if (name != null && name.trim().isNotEmpty) _userName = name.trim();
+    if (title != null && title.trim().isNotEmpty) _userTitle = title.trim();
+    notifyListeners();
+  }
+
+  void resetOnboarding() {
+    _isOnboardingCompleted = false;
+    notifyListeners();
+  }
 
   // Shelf Getters
   List<Book> get currentlyReading =>

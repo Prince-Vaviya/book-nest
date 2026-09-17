@@ -1,18 +1,141 @@
 import 'package:flutter/material.dart';
-import '../admin/admin_shell.dart';
 import 'package:provider/provider.dart';
 import '../../providers/library_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../theme/app_typography.dart';
 import '../../widgets/streak_badge.dart';
+import '../admin/admin_shell.dart';
+import '../auth/login_screen.dart';
+import '../onboarding/onboarding_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  void _showEditProfileModal(BuildContext context, LibraryProvider library) {
+    final nameCtrl = TextEditingController(text: library.userName);
+    final titleCtrl = TextEditingController(text: library.userTitle);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            20,
+            24,
+            MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.borderLight,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'Edit Reader Identity',
+                style: AppTypography.headlineMedium(color: AppColors.secondaryIndigo),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Update your display name and reader description.',
+                style: AppTypography.bodySmall(color: AppColors.textSecondary),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'READER NAME',
+                style: AppTypography.labelSmall(color: AppColors.secondaryIndigo)
+                    .copyWith(fontWeight: FontWeight.w700, letterSpacing: 1),
+              ),
+              const SizedBox(height: 6),
+              TextField(
+                controller: nameCtrl,
+                decoration: InputDecoration(
+                  hintText: 'Your name',
+                  prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.primaryAmber),
+                  filled: true,
+                  fillColor: AppColors.canvasPaper,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.borderLight),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'READER TITLE / INTENTION',
+                style: AppTypography.labelSmall(color: AppColors.secondaryIndigo)
+                    .copyWith(fontWeight: FontWeight.w700, letterSpacing: 1),
+              ),
+              const SizedBox(height: 6),
+              TextField(
+                controller: titleCtrl,
+                decoration: InputDecoration(
+                  hintText: 'Your reader title',
+                  prefixIcon: const Icon(Icons.bookmark_outline_rounded, color: AppColors.primaryAmber),
+                  filled: true,
+                  fillColor: AppColors.canvasPaper,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.borderLight),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    library.updateProfile(
+                      name: nameCtrl.text.trim(),
+                      title: titleCtrl.text.trim(),
+                    );
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Reader profile updated successfully!')),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryAmber,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: Text(
+                    'SAVE CHANGES',
+                    style: AppTypography.labelLarge(color: Colors.white)
+                        .copyWith(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final library = context.watch<LibraryProvider>();
     final goal = library.goal;
+    final userInitial = library.userName.trim().isNotEmpty
+        ? library.userName.trim()[0].toUpperCase()
+        : 'R';
 
     return Scaffold(
       backgroundColor: AppColors.canvasPaper,
@@ -27,7 +150,7 @@ class ProfileScreen extends StatelessWidget {
                   radius: 36,
                   backgroundColor: AppColors.primaryLightAmber,
                   child: Text(
-                    'R',
+                    userInitial,
                     style: AppTypography.displayMedium(color: AppColors.primaryDarkAmber),
                   ),
                 ),
@@ -37,18 +160,23 @@ class ProfileScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Rajneesh',
+                        library.userName,
                         style: AppTypography.headlineLarge(color: AppColors.secondaryIndigo),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Curator & Software Architect',
+                        library.userTitle,
                         style: AppTypography.bodySmall(color: AppColors.textSecondary),
                       ),
                       const SizedBox(height: 8),
                       StreakBadge(streakDays: goal.currentStreakDays, isCompact: true),
                     ],
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined, color: AppColors.secondaryIndigo),
+                  tooltip: 'Edit Profile',
+                  onPressed: () => _showEditProfileModal(context, library),
                 ),
               ],
             ),
@@ -164,6 +292,14 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _buildSettingsTile(
+                    icon: Icons.badge_outlined,
+                    title: 'Reader Profile & Identity',
+                    subtitle: '${library.userName} • ${library.userTitle}',
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    onTap: () => _showEditProfileModal(context, library),
+                  ),
+                  const Divider(height: 1, color: AppColors.borderLight),
+                  _buildSettingsTile(
                     icon: Icons.admin_panel_settings_rounded,
                     title: 'Admin Operations Portal',
                     subtitle: 'Catalog inventory, moderation & users',
@@ -184,6 +320,22 @@ class ProfileScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => const AdminShell(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1, color: AppColors.borderLight),
+                  _buildSettingsTile(
+                    icon: Icons.restart_alt_rounded,
+                    title: 'Restart Onboarding Tour',
+                    subtitle: 'Re-run first-time reader setup',
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    onTap: () {
+                      library.resetOnboarding();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const OnboardingScreen(),
                         ),
                       );
                     },
@@ -226,6 +378,20 @@ class ProfileScreen extends StatelessWidget {
                     subtitle: 'Version 1.0.0 (Archival Edition)',
                     trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
                     onTap: () {},
+                  ),
+                  const Divider(height: 1, color: AppColors.borderLight),
+                  _buildSettingsTile(
+                    icon: Icons.logout_rounded,
+                    title: 'Sign Out / Switch Role',
+                    subtitle: 'Return to login screen (Reader or Admin)',
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        (route) => false,
+                      );
+                    },
                   ),
                 ],
               ),

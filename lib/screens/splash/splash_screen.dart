@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../theme/app_typography.dart';
-import '../main_shell.dart';
+import '../auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -68,15 +68,15 @@ class _SplashScreenState extends State<SplashScreen>
 
     _logoController.forward();
 
-    // Navigate to MainShell after 2.5 seconds
+    // Navigate to LoginScreen after 2.5 seconds
     _navigationTimer = Timer(const Duration(milliseconds: 2500), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (_, animation, secondaryAnimation) =>
-                const MainShell(),
-            transitionsBuilder: (_, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const LoginScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
             transitionDuration: const Duration(milliseconds: 600),

@@ -5,6 +5,8 @@ import 'dashboard/admin_dashboard_screen.dart';
 import 'books/admin_books_screen.dart';
 import 'reviews/admin_reviews_screen.dart';
 import 'users/admin_users_screen.dart';
+import '../auth/login_screen.dart';
+import '../main_shell.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({super.key});
@@ -59,19 +61,37 @@ class _AdminShellState extends State<AdminShell> {
           ],
         ),
         actions: [
-          // Switch back to Reader Mode
+          // Switch to Reader Sanctuary
           TextButton.icon(
             onPressed: () {
-              Navigator.pop(context);
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MainShell()),
+                );
+              }
             },
             icon: const Icon(Icons.auto_stories_rounded, size: 16, color: AppColors.primaryAmber),
             label: Text(
-              'Reader Mode',
+              'Reader Sanctuary',
               style: AppTypography.labelSmall(color: AppColors.primaryAmber)
                   .copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, size: 18, color: AppColors.textMuted),
+            tooltip: 'Sign Out to Login',
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+          ),
+          const SizedBox(width: 4),
         ],
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(1),
