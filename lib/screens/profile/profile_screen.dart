@@ -4,7 +4,6 @@ import '../../providers/library_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../theme/app_typography.dart';
 import '../../widgets/streak_badge.dart';
-import '../admin/admin_shell.dart';
 import '../auth/login_screen.dart';
 import '../onboarding/onboarding_screen.dart';
 
@@ -300,32 +299,6 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const Divider(height: 1, color: AppColors.borderLight),
                   _buildSettingsTile(
-                    icon: Icons.admin_panel_settings_rounded,
-                    title: 'Admin Operations Portal',
-                    subtitle: 'Catalog inventory, moderation & users',
-                    trailing: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.secondaryIndigo,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        'ADMIN',
-                        style: AppTypography.labelSmall(color: AppColors.primaryLightAmber)
-                            .copyWith(fontWeight: FontWeight.w700, fontSize: 10),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const AdminShell(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1, color: AppColors.borderLight),
-                  _buildSettingsTile(
                     icon: Icons.restart_alt_rounded,
                     title: 'Restart Onboarding Tour',
                     subtitle: 'Re-run first-time reader setup',
@@ -386,6 +359,7 @@ class ProfileScreen extends StatelessWidget {
                     subtitle: 'Return to login screen (Reader or Admin)',
                     trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
                     onTap: () {
+                      library.signOut();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (_) => const LoginScreen()),

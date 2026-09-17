@@ -16,7 +16,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final TextEditingController _nameController = TextEditingController(text: 'Rajneesh');
+  late final TextEditingController _nameController;
   final TextEditingController _titleController =
       TextEditingController(text: 'Curator & Software Architect');
 
@@ -34,6 +34,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     'Art & Design',
     'Economics',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final existingName = context.read<LibraryProvider>().userName;
+    _nameController = TextEditingController(
+      text: (existingName.isNotEmpty && existingName != 'Reader') ? existingName : '',
+    );
+  }
 
   @override
   void dispose() {
@@ -298,7 +307,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               controller: _nameController,
               onChanged: (_) => setState(() {}),
               decoration: InputDecoration(
-                hintText: 'e.g. Rajneesh, Elena, Alex',
+                hintText: 'e.g. Elena, Alex, Marcus',
                 hintStyle: AppTypography.bodyMedium(color: AppColors.textMuted),
                 prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.primaryAmber),
                 filled: true,

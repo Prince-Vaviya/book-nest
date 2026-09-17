@@ -9,11 +9,13 @@ class LibraryProvider extends ChangeNotifier {
   String _selectedGenreFilter = 'All';
   String _searchQuery = '';
   
-  // User Onboarding Profile
-  String _userName = 'Rajneesh';
+  // User Onboarding & Auth Profile
+  String _userName = 'Reader';
   String _userTitle = 'Curator & Software Architect';
   List<String> _favoriteGenres = ['Technology', 'Philosophy'];
   bool _isOnboardingCompleted = false;
+  bool _isLoggedIn = false;
+  String _userRole = 'reader'; // 'reader' or 'admin'
 
   List<Book> get allBooks => _books;
   ReadingGoal get goal => _goal;
@@ -23,6 +25,33 @@ class LibraryProvider extends ChangeNotifier {
   String get userTitle => _userTitle;
   List<String> get favoriteGenres => _favoriteGenres;
   bool get isOnboardingCompleted => _isOnboardingCompleted;
+  bool get isLoggedIn => _isLoggedIn;
+  String get userRole => _userRole;
+
+  void loginAsReader({String? name}) {
+    if (name != null && name.trim().isNotEmpty) {
+      _userName = name.trim();
+    } else if (_userName.trim().isEmpty) {
+      _userName = 'Reader';
+    }
+    _isLoggedIn = true;
+    _userRole = 'reader';
+    notifyListeners();
+  }
+
+  void loginAsAdmin() {
+    _isLoggedIn = true;
+    _userRole = 'admin';
+    _userName = 'Administrator';
+    _userTitle = 'Chief Archival Curator';
+    notifyListeners();
+  }
+
+  void signOut() {
+    _isLoggedIn = false;
+    _userRole = 'reader';
+    notifyListeners();
+  }
 
   void completeOnboarding({
     required String name,
@@ -30,7 +59,7 @@ class LibraryProvider extends ChangeNotifier {
     required int dailyTargetMinutes,
     required List<String> genres,
   }) {
-    _userName = name.trim().isNotEmpty ? name.trim() : 'Reader';
+    _userName = name.trim().isNotEmpty ? name.trim() : (_userName.isNotEmpty ? _userName : 'Reader');
     _userTitle = title.trim().isNotEmpty ? title.trim() : 'Avid Reader';
     _favoriteGenres = genres.isNotEmpty ? genres : ['Technology', 'Philosophy'];
     _goal = ReadingGoal(
@@ -42,6 +71,7 @@ class LibraryProvider extends ChangeNotifier {
       weeklyMinutesHistory: _goal.weeklyMinutesHistory,
     );
     _isOnboardingCompleted = true;
+    _isLoggedIn = true;
     notifyListeners();
   }
 

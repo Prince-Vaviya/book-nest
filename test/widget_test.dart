@@ -3,10 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:booknest/main.dart';
 import 'package:booknest/screens/admin/admin_shell.dart';
 import 'package:booknest/screens/auth/login_screen.dart';
+import 'package:booknest/screens/main_shell.dart';
 import 'package:booknest/screens/onboarding/onboarding_screen.dart';
 
 void main() {
-  testWidgets('Splash transition to LoginScreen and Reader One-Click Flow',
+  testWidgets('Splash transition to LoginScreen, dynamic username sign in, and sanctuary entry',
       (WidgetTester tester) async {
     // Build our app and trigger initial frame.
     await tester.pumpWidget(const BookNestApp());
@@ -22,10 +23,14 @@ void main() {
     // Verify LoginScreen is loaded with Reader and Admin login options
     expect(find.byType(LoginScreen), findsOneWidget);
     expect(find.text('Sign in to your intellectual sanctuary'), findsOneWidget);
-    expect(find.text('SIGN IN AS READER'), findsOneWidget);
-    expect(find.text('ADMIN LOGIN'), findsOneWidget);
+    expect(find.text('YOUR NAME / USERNAME'), findsOneWidget);
 
-    // 1-Click Reader Login (no credentials required)
+    // Enter custom username during sign in
+    final usernameField = find.widgetWithText(TextField, 'e.g. Elena, Alex, Marcus');
+    await tester.enterText(usernameField, 'Elena Vance');
+    await tester.pumpAndSettle();
+
+    // Tap SIGN IN AS READER
     await tester.tap(find.text('SIGN IN AS READER'));
     await tester.pumpAndSettle();
 
@@ -36,10 +41,8 @@ void main() {
     await tester.tap(find.text('CONTINUE'));
     await tester.pumpAndSettle();
 
-    // Enter Reader Name
-    final nameField = find.widgetWithText(TextField, 'Rajneesh');
-    await tester.enterText(nameField, 'Aurelius');
-    await tester.pumpAndSettle();
+    // Verify name from Sign In is automatically prefilled in Onboarding
+    expect(find.text('Elena Vance'), findsOneWidget);
 
     // Advance to reading intentions
     await tester.tap(find.text('CONTINUE'));
@@ -49,9 +52,21 @@ void main() {
     await tester.tap(find.text('ENTER YOUR SANCTUARY'));
     await tester.pumpAndSettle();
 
-    // Verify user is in MainShell and greeted with custom name
-    expect(find.textContaining('Aurelius'), findsOneWidget);
+    // Verify user is in MainShell and dynamically greeted with custom name
+    expect(find.byType(MainShell), findsOneWidget);
+    expect(find.textContaining('Elena Vance'), findsOneWidget);
     expect(find.text('Today’s Goal'), findsOneWidget);
+
+    // Go to Profile Tab
+    await tester.tap(find.byIcon(Icons.person_outline_rounded));
+    await tester.pumpAndSettle();
+
+    // Verify Profile header shows dynamic name and avatar initial 'E'
+    expect(find.text('Elena Vance'), findsOneWidget);
+    expect(find.text('E'), findsOneWidget);
+
+    // Verify Admin Portal is NOT accessible/visible in the reader profile settings
+    expect(find.text('Admin Operations Portal'), findsNothing);
   });
 
   testWidgets('One-Click Admin Login (No credentials required)',
@@ -103,28 +118,19 @@ void main() {
     expect(find.text('ADMIN PORTAL'), findsOneWidget);
   });
 
-  testWidgets('Admin Portal switch to Reader Sanctuary and Sign Out flow',
+  testWidgets('Sign Out flow returns user to LoginScreen',
       (WidgetTester tester) async {
     await tester.pumpWidget(const BookNestApp());
     await tester.pump(const Duration(milliseconds: 3000));
     await tester.pumpAndSettle();
 
-    // Scroll to & Tap 1-Click Admin Login
-    final adminBtn = find.text('ADMIN LOGIN');
-    await tester.ensureVisible(adminBtn);
+    // Sign in as Reader
+    await tester.tap(find.text('SIGN IN AS READER'));
     await tester.pumpAndSettle();
 
-    await tester.tap(adminBtn);
+    // Skip onboarding
+    await tester.tap(find.text('Skip'));
     await tester.pumpAndSettle();
-
-    expect(find.byType(AdminShell), findsOneWidget);
-
-    // Switch to Reader Sanctuary from Admin
-    await tester.tap(find.text('Reader Sanctuary'));
-    await tester.pumpAndSettle();
-
-    // Should arrive in Reader Sanctuary / Onboarding / MainShell
-    expect(find.text('BookNest'), findsNothing); // Passed splash
 
     // Go to Profile tab
     await tester.tap(find.byIcon(Icons.person_outline_rounded));

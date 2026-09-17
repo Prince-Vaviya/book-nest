@@ -577,7 +577,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               0,
                               Review(
                                 id: 'rev-${DateTime.now().millisecondsSinceEpoch}',
-                                reviewerName: 'Rajneesh',
+                                reviewerName: context.read<LibraryProvider>().userName,
                                 rating: selectedRating,
                                 date: 'Just now',
                                 comment: commentController.text.trim(),

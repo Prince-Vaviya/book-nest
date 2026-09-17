@@ -15,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _usernameController =
+      TextEditingController();
   final TextEditingController _emailController =
       TextEditingController(text: 'reader@booknest.app');
   final TextEditingController _passwordController =
@@ -25,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -32,6 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _loginAsReader() {
     final library = context.read<LibraryProvider>();
+    final enteredName = _usernameController.text.trim();
+    library.loginAsReader(name: enteredName.isNotEmpty ? enteredName : 'Reader');
+
     final destination = library.isOnboardingCompleted
         ? const MainShell()
         : const OnboardingScreen();
@@ -48,6 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginAsAdmin() {
+    final library = context.read<LibraryProvider>();
+    library.loginAsAdmin();
+
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
@@ -320,6 +329,31 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          'YOUR NAME / USERNAME',
+          style: AppTypography.labelSmall(color: AppColors.secondaryIndigo)
+              .copyWith(letterSpacing: 0.8, fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: _usernameController,
+          decoration: InputDecoration(
+            hintText: 'e.g. Elena, Alex, Marcus',
+            prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.primaryAmber),
+            filled: true,
+            fillColor: AppColors.canvasPaper,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.borderLight),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.borderLight),
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
         Text(
           'READER EMAIL',
           style: AppTypography.labelSmall(color: AppColors.secondaryIndigo)
