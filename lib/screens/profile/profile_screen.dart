@@ -47,7 +47,9 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 18),
               Text(
                 'Edit Reader Identity',
-                style: AppTypography.headlineMedium(color: AppColors.secondaryIndigo),
+                style: AppTypography.headlineMedium(
+                  color: AppColors.secondaryIndigo,
+                ),
               ),
               const SizedBox(height: 6),
               Text(
@@ -57,15 +59,19 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 'READER NAME',
-                style: AppTypography.labelSmall(color: AppColors.secondaryIndigo)
-                    .copyWith(fontWeight: FontWeight.w700, letterSpacing: 1),
+                style: AppTypography.labelSmall(
+                  color: AppColors.secondaryIndigo,
+                ).copyWith(fontWeight: FontWeight.w700, letterSpacing: 1),
               ),
               const SizedBox(height: 6),
               TextField(
                 controller: nameCtrl,
                 decoration: InputDecoration(
                   hintText: 'Your name',
-                  prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.primaryAmber),
+                  prefixIcon: const Icon(
+                    Icons.person_outline_rounded,
+                    color: AppColors.primaryAmber,
+                  ),
                   filled: true,
                   fillColor: AppColors.canvasPaper,
                   border: OutlineInputBorder(
@@ -77,15 +83,19 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'READER TITLE / INTENTION',
-                style: AppTypography.labelSmall(color: AppColors.secondaryIndigo)
-                    .copyWith(fontWeight: FontWeight.w700, letterSpacing: 1),
+                style: AppTypography.labelSmall(
+                  color: AppColors.secondaryIndigo,
+                ).copyWith(fontWeight: FontWeight.w700, letterSpacing: 1),
               ),
               const SizedBox(height: 6),
               TextField(
                 controller: titleCtrl,
                 decoration: InputDecoration(
                   hintText: 'Your reader title',
-                  prefixIcon: const Icon(Icons.bookmark_outline_rounded, color: AppColors.primaryAmber),
+                  prefixIcon: const Icon(
+                    Icons.bookmark_outline_rounded,
+                    color: AppColors.primaryAmber,
+                  ),
                   filled: true,
                   fillColor: AppColors.canvasPaper,
                   border: OutlineInputBorder(
@@ -105,19 +115,24 @@ class ProfileScreen extends StatelessWidget {
                     );
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Reader profile updated successfully!')),
+                      const SnackBar(
+                        content: Text('Reader profile updated successfully!'),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryAmber,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: Text(
                     'SAVE CHANGES',
-                    style: AppTypography.labelLarge(color: Colors.white)
-                        .copyWith(fontWeight: FontWeight.w700),
+                    style: AppTypography.labelLarge(
+                      color: Colors.white,
+                    ).copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
@@ -150,7 +165,9 @@ class ProfileScreen extends StatelessWidget {
                   backgroundColor: AppColors.primaryLightAmber,
                   child: Text(
                     userInitial,
-                    style: AppTypography.displayMedium(color: AppColors.primaryDarkAmber),
+                    style: AppTypography.displayMedium(
+                      color: AppColors.primaryDarkAmber,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -160,20 +177,30 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Text(
                         library.userName,
-                        style: AppTypography.headlineLarge(color: AppColors.secondaryIndigo),
+                        style: AppTypography.headlineLarge(
+                          color: AppColors.secondaryIndigo,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         library.userTitle,
-                        style: AppTypography.bodySmall(color: AppColors.textSecondary),
+                        style: AppTypography.bodySmall(
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                       const SizedBox(height: 8),
-                      StreakBadge(streakDays: goal.currentStreakDays, isCompact: true),
+                      StreakBadge(
+                        streakDays: goal.currentStreakDays,
+                        isCompact: true,
+                      ),
                     ],
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.edit_outlined, color: AppColors.secondaryIndigo),
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.secondaryIndigo,
+                  ),
                   tooltip: 'Edit Profile',
                   onPressed: () => _showEditProfileModal(context, library),
                 ),
@@ -184,7 +211,9 @@ class ProfileScreen extends StatelessWidget {
             // Reading Analytics & Habits
             Text(
               'Weekly Reading Activity',
-              style: AppTypography.headlineSmall(color: AppColors.secondaryIndigo),
+              style: AppTypography.headlineSmall(
+                color: AppColors.secondaryIndigo,
+              ),
             ),
             const SizedBox(height: 12),
             Container(
@@ -209,12 +238,15 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Daily Minutes',
-                        style: AppTypography.labelLarge(color: AppColors.secondaryIndigo),
+                        style: AppTypography.labelLarge(
+                          color: AppColors.secondaryIndigo,
+                        ),
                       ),
                       Text(
                         'Avg 43 mins/day',
-                        style: AppTypography.labelSmall(color: AppColors.primaryAmber)
-                            .copyWith(fontWeight: FontWeight.w700),
+                        style: AppTypography.labelSmall(
+                          color: AppColors.primaryAmber,
+                        ).copyWith(fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
@@ -230,7 +262,12 @@ class ProfileScreen extends StatelessWidget {
                       _buildBar('Thu', goal.weeklyMinutesHistory[3], 60),
                       _buildBar('Fri', goal.weeklyMinutesHistory[4], 60),
                       _buildBar('Sat', goal.weeklyMinutesHistory[5], 60),
-                      _buildBar('Sun', goal.weeklyMinutesHistory[6], 60, isToday: true),
+                      _buildBar(
+                        'Sun',
+                        goal.weeklyMinutesHistory[6],
+                        60,
+                        isToday: true,
+                      ),
                     ],
                   ),
                 ],
@@ -241,7 +278,9 @@ class ProfileScreen extends StatelessWidget {
             // Badges & Milestones
             Text(
               'Reader Achievements',
-              style: AppTypography.headlineSmall(color: AppColors.secondaryIndigo),
+              style: AppTypography.headlineSmall(
+                color: AppColors.secondaryIndigo,
+              ),
             ),
             const SizedBox(height: 12),
             Row(
@@ -279,7 +318,9 @@ class ProfileScreen extends StatelessWidget {
             // Settings List
             Text(
               'Preferences & Nest Settings',
-              style: AppTypography.headlineSmall(color: AppColors.secondaryIndigo),
+              style: AppTypography.headlineSmall(
+                color: AppColors.secondaryIndigo,
+              ),
             ),
             const SizedBox(height: 12),
             Container(
@@ -294,7 +335,10 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.badge_outlined,
                     title: 'Reader Profile & Identity',
                     subtitle: '${library.userName} • ${library.userTitle}',
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                    ),
                     onTap: () => _showEditProfileModal(context, library),
                   ),
                   const Divider(height: 1, color: AppColors.borderLight),
@@ -302,7 +346,10 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.restart_alt_rounded,
                     title: 'Restart Onboarding Tour',
                     subtitle: 'Re-run first-time reader setup',
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                    ),
                     onTap: () {
                       library.resetOnboarding();
                       Navigator.pushReplacement(
@@ -319,7 +366,7 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Daily Reading Reminders',
                     subtitle: '8:00 PM every evening',
                     trailing: Switch(
-                      value: true,
+                      value: false,
                       activeThumbColor: AppColors.primaryAmber,
                       onChanged: (val) {},
                     ),
@@ -329,7 +376,10 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.font_download_outlined,
                     title: 'Default Typography',
                     subtitle: 'Literata (Serif) • 17pt',
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                    ),
                     onTap: () {},
                   ),
                   const Divider(height: 1, color: AppColors.borderLight),
@@ -337,10 +387,17 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.cloud_download_outlined,
                     title: 'Export Reading Notes & Highlights',
                     subtitle: 'Markdown & PDF format',
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                    ),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Exporting reading notes to Markdown...')),
+                        const SnackBar(
+                          content: Text(
+                            'Exporting reading notes to Markdown...',
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -349,7 +406,10 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.info_outline_rounded,
                     title: 'About BookNest',
                     subtitle: 'Version 1.0.0 (Archival Edition)',
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                    ),
                     onTap: () {},
                   ),
                   const Divider(height: 1, color: AppColors.borderLight),
@@ -357,7 +417,10 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.logout_rounded,
                     title: 'Sign Out / Switch Role',
                     subtitle: 'Return to login screen (Reader or Admin)',
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                    ),
                     onTap: () {
                       library.signOut();
                       Navigator.pushAndRemoveUntil(
@@ -376,7 +439,12 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBar(String day, int minutes, int maxMinutes, {bool isToday = false}) {
+  Widget _buildBar(
+    String day,
+    int minutes,
+    int maxMinutes, {
+    bool isToday = false,
+  }) {
     final heightRatio = (minutes / maxMinutes).clamp(0.1, 1.0);
     final barHeight = 80.0 * heightRatio;
 
@@ -393,7 +461,9 @@ class ProfileScreen extends StatelessWidget {
           width: 24,
           height: barHeight,
           decoration: BoxDecoration(
-            color: isToday ? AppColors.primaryAmber : AppColors.surfaceContainerHigh,
+            color: isToday
+                ? AppColors.primaryAmber
+                : AppColors.surfaceContainerHigh,
             borderRadius: BorderRadius.circular(6),
           ),
         ),
@@ -408,7 +478,12 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBadgeCard(String title, String subtitle, Color bgColor, Color iconColor) {
+  Widget _buildBadgeCard(
+    String title,
+    String subtitle,
+    Color bgColor,
+    Color iconColor,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
       decoration: BoxDecoration(
@@ -420,13 +495,17 @@ class ProfileScreen extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppTypography.labelSmall(color: iconColor).copyWith(fontWeight: FontWeight.w700),
+            style: AppTypography.labelSmall(
+              color: iconColor,
+            ).copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 4),
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: AppTypography.labelSmall(color: AppColors.textSecondary).copyWith(fontSize: 10),
+            style: AppTypography.labelSmall(
+              color: AppColors.textSecondary,
+            ).copyWith(fontSize: 10),
           ),
         ],
       ),
